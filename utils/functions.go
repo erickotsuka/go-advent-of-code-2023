@@ -11,5 +11,5 @@ func ReadInput(day int) string {
 	if err != nil {
 		panic(err)
 	}
-	return strings.TrimSuffix(string(dat), "\r\n")
+	return strings.TrimSuffix(string(dat), "\n")
 }
