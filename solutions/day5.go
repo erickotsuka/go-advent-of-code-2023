@@ -114,16 +114,16 @@ func Day5Part2() {
 
 	smallestLocationNumber := maxUint
 
-	sourceIntervals := seedIntervals
-	var destinationIntervals []interval
-
-	for _, intervalToIntervalMap := range intervalToIntervalMaps {
-		for sourceInterval, destinationInterval := range intervalToIntervalMap {
-			for _, checkingSourceInterval := range sourceIntervals {
-				// TODO: finish this	
-			}
-		}	
-	}
+	// sourceIntervals := seedIntervals
+	// var destinationIntervals []interval
+	//
+	// for _, intervalToIntervalMap := range intervalToIntervalMaps {
+	// 	for sourceInterval, destinationInterval := range intervalToIntervalMap {
+	// 		for _, checkingSourceInterval := range sourceIntervals {
+	// 			// TODO: finish this	
+	// 		}
+	// 	}	
+	// }
 	
 			
 
