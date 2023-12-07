@@ -114,16 +114,40 @@ func Day5Part2() {
 
 	smallestLocationNumber := maxUint
 
-	// sourceIntervals := seedIntervals
-	// var destinationIntervals []interval
-	//
-	// for _, intervalToIntervalMap := range intervalToIntervalMaps {
-	// 	for sourceInterval, destinationInterval := range intervalToIntervalMap {
-	// 		for _, checkingSourceInterval := range sourceIntervals {
-	// 			// TODO: finish this	
-	// 		}
-	// 	}	
-	// }
+	sourceIntervals := seedIntervals
+
+	for _, intervalToIntervalMap := range intervalToIntervalMaps {
+		for _, checkingSourceInterval := range sourceIntervals {
+			var destinationInterval interval
+			// var outOfBoundsSourceIntervals []interval
+			for mappedSourceInterval, mappedDestinationInterval := range intervalToIntervalMap {
+				var entryOutOfBoundsSourceIntervals []interval
+				if mappedSourceInterval.begin > checkingSourceInterval.end {
+					// no source from checking source interval is mapped in this entry
+					entryOutOfBoundsSourceIntervals = []interval{checkingSourceInterval} 
+				} else if mappedSourceInterval.begin <= checkingSourceInterval.begin && checkingSourceInterval.end <= mappedSourceInterval.end {
+					// checking source interval is fully contained in this mapped source interval
+					distanceBeginning := checkingSourceInterval.begin - mappedSourceInterval.begin 
+					distanceEnd := mappedSourceInterval.end - checkingSourceInterval.end
+					destinationInterval.begin = mappedDestinationInterval.begin + distanceBeginning 
+					destinationInterval.end = mappedDestinationInterval.end - distanceEnd
+				} else if mappedSourceInterval.begin <= checkingSourceInterval.begin && checkingSourceInterval.end > mappedDestinationInterval.end {
+					distanceBeginning := checkingSourceInterval.begin - mappedSourceInterval.begin
+					destinationInterval.begin = mappedDestinationInterval.begin + distanceBeginning
+					destinationInterval.end = mappedDestinationInterval.end
+					intervalAfterEnd := interval{begin: mappedSourceInterval.end + 1, end: checkingSourceInterval.end}
+					entryOutOfBoundsSourceIntervals = []interval{intervalAfterEnd} 
+				} else if checkingSourceInterval.begin < mappedSourceInterval.begin && checkingSourceInterval.end <= mappedSourceInterval.end {
+					// there is interval before begin
+
+				} else if checkingSourceInterval.begin < mappedSourceInterval.begin && checkingSourceInterval.end > mappedSourceInterval.end {
+					// there are intervals before begin and after end
+				}
+				fmt.Println(entryOutOfBoundsSourceIntervals)
+			}	
+
+		}
+	}
 	
 			
 
