@@ -53,6 +53,25 @@ func Day8Part1() {
 	fmt.Println(numberOfSteps)
 }
 
+func gcd(a, b int) int {
+	for b != 0 {
+		t := b
+		b = a % b
+		a = t
+	}
+	return a
+}
+
+func lcm(a, b int, integers ...int) int {
+	result := a * b / gcd(a, b)
+
+	for i := 0; i < len(integers); i++ {
+		result = lcm(result, integers[i])
+	}
+
+	return result
+}
+
 func Day8Part2() {
 	instructionsAndMap := strings.Split(utils.ReadInput(8), "\n\n")
 
@@ -64,6 +83,7 @@ func Day8Part2() {
 	nodesMapLines := strings.Split(nodesMap, "\n")
 	var startingNodes []string
 	var endingNodes []string
+	result := 1
 
 	for _, line := range nodesMapLines {
 		nodeNameAndAdjacents := strings.Split(line, " = ")
@@ -92,9 +112,6 @@ func Day8Part2() {
 		nodeToAdjacentsMap[nodeName] = adjacentNodes{left: nodeLeft, right: nodeRight}
 	}
 
-	fmt.Println(startingNodes)
-	fmt.Println(endingNodes)
-
 	startEndNodesStepsMatrix := make([][]int, len(startingNodes))
 
 	for startingNodeIndex := 0; startingNodeIndex < len(startingNodes); startingNodeIndex++ {
@@ -102,7 +119,6 @@ func Day8Part2() {
 		for endingNodeIndex := 0; endingNodeIndex < len(endingNodes); endingNodeIndex++ {
 			initialNode := startingNodes[startingNodeIndex] 
 			finalNode := endingNodes[endingNodeIndex] 
-			fmt.Println(initialNode + "->" + finalNode)
 			currentNode := initialNode
 
 			numberOfSteps :=0
@@ -111,8 +127,9 @@ func Day8Part2() {
 			var visitedNodes []string
 
 			for numberOfSteps = 0; currentNode != finalNode; numberOfSteps++ {
-				instruction := instructions[numberOfSteps % numberOfInstructions]
-				visitedNode := currentNode + string(instruction)
+				instructionIndex  := numberOfSteps % numberOfInstructions
+				instruction := instructions[instructionIndex]
+				visitedNode := currentNode + string(fmt.Sprint(instructionIndex))
 				if slices.Contains(visitedNodes, visitedNode) {
 					numberOfSteps = -1
 					break
@@ -129,5 +146,19 @@ func Day8Part2() {
 		}
 	}
 
-	fmt.Println(startEndNodesStepsMatrix)
+	numberOfStepsList := make([]int, len(startingNodes))
+	index := 0
+
+	for _, row := range startEndNodesStepsMatrix {
+		for _, value := range row {
+			if value != -1 {
+				numberOfStepsList[index] = value
+				index++
+			}	
+		}
+	}
+	
+	result = lcm(numberOfStepsList[0], numberOfStepsList[1], numberOfStepsList[2:]...)
+
+	fmt.Println(result)
 }
