@@ -4,6 +4,7 @@ import (
 	"github.com/erickotsuka/go-advent-of-code-2023/solutions"
 )
 
+
 func main() {
-	solutions.Day5Part2()
+	solutions.Day10Part1()
 }
