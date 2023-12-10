@@ -122,7 +122,7 @@ func Day5Part2() {
 			// var outOfBoundsSourceIntervals []interval
 			for mappedSourceInterval, mappedDestinationInterval := range intervalToIntervalMap {
 				var entryOutOfBoundsSourceIntervals []interval
-				if mappedSourceInterval.begin > checkingSourceInterval.end {
+				if mappedSourceInterval.begin > checkingSourceInterval.end || mappedSourceInterval.end < checkingSourceInterval.begin {
 					// no source from checking source interval is mapped in this entry
 					entryOutOfBoundsSourceIntervals = []interval{checkingSourceInterval} 
 				} else if mappedSourceInterval.begin <= checkingSourceInterval.begin && checkingSourceInterval.end <= mappedSourceInterval.end {
@@ -139,9 +139,19 @@ func Day5Part2() {
 					entryOutOfBoundsSourceIntervals = []interval{intervalAfterEnd} 
 				} else if checkingSourceInterval.begin < mappedSourceInterval.begin && checkingSourceInterval.end <= mappedSourceInterval.end {
 					// there is interval before begin
+					distance := checkingSourceInterval.end - mappedSourceInterval.begin
+					destinationInterval.begin = mappedDestinationInterval.begin
+					destinationInterval.end = mappedDestinationInterval.begin + distance
+					intervalBeforeBegin := interval{begin: checkingSourceInterval.begin, end: mappedSourceInterval.begin - 1}
+					entryOutOfBoundsSourceIntervals = []interval{intervalBeforeBegin}
 
 				} else if checkingSourceInterval.begin < mappedSourceInterval.begin && checkingSourceInterval.end > mappedSourceInterval.end {
 					// there are intervals before begin and after end
+					destinationInterval.begin = mappedDestinationInterval.begin
+					destinationInterval.end = mappedDestinationInterval.end
+					intervalBeforeBegin := interval{begin: checkingSourceInterval.begin, end: mappedSourceInterval.begin - 1}
+					intervalAfterEnd := interval{begin: mappedSourceInterval.end + 1, end:  checkingSourceInterval.end}
+					entryOutOfBoundsSourceIntervals = []interval{intervalBeforeBegin, intervalAfterEnd}
 				}
 				fmt.Println(entryOutOfBoundsSourceIntervals)
 			}	
