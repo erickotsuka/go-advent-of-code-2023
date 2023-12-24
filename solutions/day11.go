@@ -93,3 +93,36 @@ func Day11Part1() {
 	}
 	fmt.Println(result)
 }
+
+func Day11Part2() {
+	lines := strings.Split(utils.ReadInput(11), "\n")
+	rowsWithoutGalaxies := getRowsWithoutGalaxies(lines)
+	columnsWithoutGalaxies := getColumnsWithoutGalaxies(lines)
+	galaxyPositions := getGalaxyPositions(lines)
+	result := 0
+	for index, position := range galaxyPositions[:len(galaxyPositions)-1] {
+		for j := index + 1; j < len(galaxyPositions); j++ {
+			horizontalDistance := position.row - galaxyPositions[j].row
+			if horizontalDistance < 0 {
+				horizontalDistance = -horizontalDistance
+			}
+			for _, rowWithoutGalaxies := range rowsWithoutGalaxies {
+				if (galaxyPositions[j].row < rowWithoutGalaxies && rowWithoutGalaxies < position.row) || (position.row < rowWithoutGalaxies && rowWithoutGalaxies < galaxyPositions[j].row) {
+					horizontalDistance += 999999
+				}
+			}
+			verticalDistance := position.col - galaxyPositions[j].col
+			if verticalDistance < 0 {
+				verticalDistance = -verticalDistance
+			}
+			for _, columnWithoutGalaxies := range columnsWithoutGalaxies {
+				if (galaxyPositions[j].col < columnWithoutGalaxies && columnWithoutGalaxies < position.col) || (position.col < columnWithoutGalaxies && columnWithoutGalaxies < galaxyPositions[j].col) {
+					verticalDistance += 999999
+				}
+			}
+			distance := horizontalDistance + verticalDistance
+			result += distance
+		}
+	}
+	fmt.Println(result)
+}
